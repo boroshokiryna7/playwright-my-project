@@ -1,0 +1,23 @@
+{
+  "name": "playwright-my-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/boroshokiryna7/playwright-my-project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/boroshokiryna7/playwright-my-project/issues"
+  },
+  "homepage": "https://github.com/boroshokiryna7/playwright-my-project#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.9.1"
+  }
+}
