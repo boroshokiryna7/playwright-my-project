@@ -4,15 +4,6 @@ import { RegistrationPage } from './pageObjects/RegistrationPage';
 const passwordRulesError =
   'Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter';
 
-const baseUrl = 'https://qauto.forstudy.space';
-
-test.use({
-  httpCredentials: {
-    username: 'guest',
-    password: 'welcome2qauto',
-  },
-});
-
 function getRandomEmail(): string {
   return `aqa-codex-${Date.now()}-${Math.floor(Math.random() * 10000)}@test.com`;
 }
@@ -23,7 +14,7 @@ test.describe('QAuto registration form', () => {
     const email = getRandomEmail();
     const password = 'Password1';
 
-    await registrationPage.open(baseUrl);
+    await registrationPage.open();
     await registrationPage.fillForm({
       name: 'Anna',
       lastName: 'Tester',
@@ -42,7 +33,7 @@ test.describe('QAuto registration form', () => {
   test('shows required errors for empty mandatory fields', async ({ page }) => {
     const registrationPage = new RegistrationPage(page);
 
-    await registrationPage.open(baseUrl);
+    await registrationPage.open();
 
     await registrationPage.blurName();
     await registrationPage.expectInvalidField(registrationPage.nameInput, 'Name required');
@@ -66,7 +57,7 @@ test.describe('QAuto registration form', () => {
   test('validates name format and length', async ({ page }) => {
     const registrationPage = new RegistrationPage(page);
 
-    await registrationPage.open(baseUrl);
+    await registrationPage.open();
 
     await registrationPage.nameInput.fill('A');
     await registrationPage.blurName();
@@ -83,7 +74,7 @@ test.describe('QAuto registration form', () => {
   test('rejects Cyrillic characters in name', async ({ page }) => {
     const registrationPage = new RegistrationPage(page);
 
-    await registrationPage.open(baseUrl);
+    await registrationPage.open();
 
     await registrationPage.nameInput.fill('Іван');
     await registrationPage.blurName();
@@ -97,7 +88,7 @@ test.describe('QAuto registration form', () => {
   test('validates last name format and length', async ({ page }) => {
     const registrationPage = new RegistrationPage(page);
 
-    await registrationPage.open(baseUrl);
+    await registrationPage.open();
 
     await registrationPage.lastNameInput.fill('B'.repeat(21));
     await registrationPage.blurLastName();
@@ -114,7 +105,7 @@ test.describe('QAuto registration form', () => {
   test('validates incorrect email', async ({ page }) => {
     const registrationPage = new RegistrationPage(page);
 
-    await registrationPage.open(baseUrl);
+    await registrationPage.open();
 
     await registrationPage.emailInput.fill('aqa-codex-email');
     await registrationPage.blurEmail();
@@ -125,7 +116,7 @@ test.describe('QAuto registration form', () => {
   test('rejects email with spaces inside', async ({ page }) => {
     const registrationPage = new RegistrationPage(page);
 
-    await registrationPage.open(baseUrl);
+    await registrationPage.open();
 
     await registrationPage.emailInput.fill('test @domain.com');
     await registrationPage.blurEmail();
@@ -136,7 +127,7 @@ test.describe('QAuto registration form', () => {
   test('shows errors when user enters incorrect registration data', async ({ page }) => {
     const registrationPage = new RegistrationPage(page);
 
-    await registrationPage.open(baseUrl);
+    await registrationPage.open();
     await registrationPage.fillForm({
       name: 'Anna1',
       lastName: 'Tester1',
@@ -164,7 +155,7 @@ test.describe('QAuto registration form', () => {
   test('validates password rules', async ({ page }) => {
     const registrationPage = new RegistrationPage(page);
 
-    await registrationPage.open(baseUrl);
+    await registrationPage.open();
 
     await registrationPage.passwordInput.fill('password');
     await registrationPage.blurPassword();
@@ -175,7 +166,7 @@ test.describe('QAuto registration form', () => {
   test('rejects password with only special characters', async ({ page }) => {
     const registrationPage = new RegistrationPage(page);
 
-    await registrationPage.open(baseUrl);
+    await registrationPage.open();
 
     await registrationPage.passwordInput.fill('!@#$%^&*()_+');
     await registrationPage.blurPassword();
@@ -186,7 +177,7 @@ test.describe('QAuto registration form', () => {
   test('validates repeated password match', async ({ page }) => {
     const registrationPage = new RegistrationPage(page);
 
-    await registrationPage.open(baseUrl);
+    await registrationPage.open();
 
     await registrationPage.passwordInput.fill('Password1');
     await registrationPage.repeatPasswordInput.fill('Password2');
@@ -209,7 +200,7 @@ test.describe('QAuto registration form', () => {
       await route.fulfill({ status: 500, body: 'Unexpected signup request' });
     });
 
-    await registrationPage.open(baseUrl);
+    await registrationPage.open();
     await registrationPage.fillForm({
       name: 'Anna',
       lastName: 'Tester',
@@ -233,7 +224,7 @@ test.describe('QAuto registration form', () => {
     const email = getRandomEmail();
     const password = 'Password1';
 
-    const response = await request.post(`${baseUrl}/api/auth/signup`, {
+    const response = await request.post('/api/auth/signup', {
       data: {
         name: 'Anna',
         lastName: 'Tester',
@@ -244,7 +235,7 @@ test.describe('QAuto registration form', () => {
     });
     await expect(response).toBeOK();
 
-    await registrationPage.open(baseUrl);
+    await registrationPage.open();
     await registrationPage.fillForm({
       name: 'Anna',
       lastName: 'Tester',
