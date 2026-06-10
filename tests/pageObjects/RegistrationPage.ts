@@ -10,27 +10,41 @@ export type RegistrationUser = {
 
 export class RegistrationPage {
   readonly page: Page;
-  readonly modal: Locator;
-  readonly nameInput: Locator;
-  readonly lastNameInput: Locator;
-  readonly emailInput: Locator;
-  readonly passwordInput: Locator;
-  readonly repeatPasswordInput: Locator;
-  readonly registerButton: Locator;
+
+  get modal(): Locator {
+    return this.page.locator('.modal-content').filter({ hasText: 'Registration' }).last();
+  }
+
+  get nameInput(): Locator {
+    return this.modal.locator('#signupName');
+  }
+
+  get lastNameInput(): Locator {
+    return this.modal.locator('#signupLastName');
+  }
+
+  get emailInput(): Locator {
+    return this.modal.locator('#signupEmail');
+  }
+
+  get passwordInput(): Locator {
+    return this.modal.locator('#signupPassword');
+  }
+
+  get repeatPasswordInput(): Locator {
+    return this.modal.locator('#signupRepeatPassword');
+  }
+
+  get registerButton(): Locator {
+    return this.modal.getByRole('button', { name: 'Register' });
+  }
 
   constructor(page: Page) {
     this.page = page;
-    this.modal = page.locator('.modal-content').filter({ hasText: 'Registration' }).last();
-    this.nameInput = this.modal.locator('#signupName');
-    this.lastNameInput = this.modal.locator('#signupLastName');
-    this.emailInput = this.modal.locator('#signupEmail');
-    this.passwordInput = this.modal.locator('#signupPassword');
-    this.repeatPasswordInput = this.modal.locator('#signupRepeatPassword');
-    this.registerButton = this.modal.getByRole('button', { name: 'Register' });
   }
 
-  async open(baseUrl: string): Promise<void> {
-    await this.page.goto(baseUrl);
+  async open(): Promise<void> {
+    await this.page.goto('/');
     await this.page.getByRole('button', { name: 'Sign In' }).click();
     await this.page.getByRole('button', { name: 'Registration' }).click();
     await expect(this.modal.getByRole('heading', { name: 'Registration' })).toBeVisible();
