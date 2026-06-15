@@ -1,4 +1,4 @@
-import { test, expect } from './userGarage.fixture';
+const { test, expect } = require('./userGarage.fixture');
 
 test('user can see garage and add a car', async ({ userGaragePage }) => {
   await userGaragePage.addCar('My Car');

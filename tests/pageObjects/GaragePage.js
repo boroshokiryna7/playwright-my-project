@@ -1,18 +1,16 @@
-import { expect, type Page } from '@playwright/test';
+const { expect } = require('@playwright/test');
 
-export class GaragePage {
-  readonly page: Page;
-
-  constructor(page: Page) {
+class GaragePage {
+  constructor(page) {
     this.page = page;
   }
 
-  async open(): Promise<void> {
+  async open() {
     await this.page.goto('/panel/garage');
     await expect(this.page.getByRole('heading', { name: 'Garage' })).toBeVisible();
   }
 
-  async addCar(name: string): Promise<void> {
+  async addCar(name) {
     await this.page.getByRole('button', { name: 'Add car' }).click();
 
     await this.page.getByRole('heading', { name: 'Add a car' }).waitFor({ state: 'visible', timeout: 5000 });
@@ -30,7 +28,7 @@ export class GaragePage {
     }
 
     if ((await mileage.count()) > 0) {
-      await mileage.fill('100').catch(() => mileage.evaluate((el: any) => (el.value = '100')));
+      await mileage.fill('100').catch(() => mileage.evaluate(el => (el.value = '100')));
     }
 
    
@@ -42,3 +40,5 @@ export class GaragePage {
     await this.page.waitForSelector('dialog, .modal-content', { state: 'detached', timeout: 10000 }).catch(() => null);
   }
 }
+
+module.exports = { GaragePage };

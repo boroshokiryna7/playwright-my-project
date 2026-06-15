@@ -1,10 +1,10 @@
-import { expect, test } from '@playwright/test';
-import { RegistrationPage } from './pageObjects/RegistrationPage';
+const { expect, test } = require('@playwright/test');
+const { RegistrationPage } = require('./pageObjects/RegistrationPage');
 
 const passwordRulesError =
   'Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter';
 
-function getRandomEmail(): string {
+function getRandomEmail() {
   return `aqa-codex-${Date.now()}-${Math.floor(Math.random() * 10000)}@test.com`;
 }
 

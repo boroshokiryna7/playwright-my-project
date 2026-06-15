@@ -1,4 +1,4 @@
-import { readFileSync } from 'fs';
+const { readFileSync } = require('fs');
 
 const envFile = readFileSync('.env', 'utf-8');
 
@@ -10,10 +10,12 @@ for (const line of envFile.split('\n')) {
   }
 }
 
-export const environment = {
-  baseUrl: process.env.BASE_URL as string,
+const environment = {
+  baseUrl: process.env.BASE_URL,
   httpCredentials: {
-    username: process.env.HTTP_USERNAME as string,
-    password: process.env.HTTP_PASSWORD as string,
+    username: process.env.HTTP_USERNAME,
+    password: process.env.HTTP_PASSWORD,
   },
 };
+
+module.exports = { environment };

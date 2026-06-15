@@ -1,56 +1,46 @@
-import { expect, type Locator, type Page } from '@playwright/test';
+const { expect } = require('@playwright/test');
 
-export type RegistrationUser = {
-  name: string;
-  lastName: string;
-  email: string;
-  password: string;
-  repeatPassword: string;
-};
-
-export class RegistrationPage {
-  readonly page: Page;
-
-  get modal(): Locator {
+class RegistrationPage {
+  get modal() {
     return this.page.locator('.modal-content').filter({ hasText: 'Registration' }).last();
   }
 
-  get nameInput(): Locator {
+  get nameInput() {
     return this.modal.locator('#signupName');
   }
 
-  get lastNameInput(): Locator {
+  get lastNameInput() {
     return this.modal.locator('#signupLastName');
   }
 
-  get emailInput(): Locator {
+  get emailInput() {
     return this.modal.locator('#signupEmail');
   }
 
-  get passwordInput(): Locator {
+  get passwordInput() {
     return this.modal.locator('#signupPassword');
   }
 
-  get repeatPasswordInput(): Locator {
+  get repeatPasswordInput() {
     return this.modal.locator('#signupRepeatPassword');
   }
 
-  get registerButton(): Locator {
+  get registerButton() {
     return this.modal.getByRole('button', { name: 'Register' });
   }
 
-  constructor(page: Page) {
+  constructor(page) {
     this.page = page;
   }
 
-  async open(): Promise<void> {
+  async open() {
     await this.page.goto('/');
     await this.page.getByRole('button', { name: 'Sign In' }).click();
     await this.page.getByRole('button', { name: 'Registration' }).click();
     await expect(this.modal.getByRole('heading', { name: 'Registration' })).toBeVisible();
   }
 
-  async fillForm(user: RegistrationUser): Promise<void> {
+  async fillForm(user) {
     await this.nameInput.fill(user.name);
     await this.lastNameInput.fill(user.lastName);
     await this.emailInput.fill(user.email);
@@ -58,38 +48,40 @@ export class RegistrationPage {
     await this.repeatPasswordInput.fill(user.repeatPassword);
   }
 
-  async blurName(): Promise<void> {
+  async blurName() {
     await this.blurField(this.nameInput);
   }
 
-  async blurLastName(): Promise<void> {
+  async blurLastName() {
     await this.blurField(this.lastNameInput);
   }
 
-  async blurEmail(): Promise<void> {
+  async blurEmail() {
     await this.blurField(this.emailInput);
   }
 
-  async blurPassword(): Promise<void> {
+  async blurPassword() {
     await this.blurField(this.passwordInput);
   }
 
-  async blurRepeatPassword(): Promise<void> {
+  async blurRepeatPassword() {
     await this.blurField(this.repeatPasswordInput);
   }
 
-  async submit(): Promise<void> {
+  async submit() {
     await this.registerButton.click();
   }
 
-  async expectInvalidField(field: Locator, message: string): Promise<void> {
+  async expectInvalidField(field, message) {
     await expect(this.modal.getByText(message, { exact: true })).toBeVisible();
     await expect(field).toHaveClass(/is-invalid/);
     await expect(this.registerButton).toBeDisabled();
   }
 
-  private async blurField(field: Locator): Promise<void> {
+  async blurField(field) {
     await field.focus();
     await field.blur();
   }
 }
+
+module.exports = { RegistrationPage };

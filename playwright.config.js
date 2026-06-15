@@ -1,7 +1,7 @@
-import { defineConfig, devices } from '@playwright/test';
-import { environment } from './config/environment';
+const { defineConfig, devices } = require('@playwright/test');
+const { environment } = require('./config/environment');
 
-export default defineConfig({
+module.exports = defineConfig({
   testDir: './tests',
   timeout: 120000,
   fullyParallel: true,
@@ -25,7 +25,7 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     // Setup project: prepares authenticated storage state
-    { name: 'setup', testMatch: /.*\.setup\.ts/ },
+    { name: 'setup', testMatch: /.*\.setup\.js/ },
 
     {
       name: 'chromium',

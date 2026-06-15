@@ -1,5 +1,5 @@
-import { test as setup } from '@playwright/test';
-import { RegistrationPage } from './pageObjects/RegistrationPage';
+const { test: setup } = require('@playwright/test');
+const { RegistrationPage } = require('./pageObjects/RegistrationPage');
 
 setup.setTimeout(120000);
 
@@ -92,7 +92,10 @@ setup('authenticate', async ({ page, request }, testInfo) => {
           await pwdFallback.press('Enter').catch(() => null);
         }
         await authPage.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => null);
-        await authPage.evaluate(() => { const f = document.querySelector('form'); if (f) (f as HTMLFormElement).submit(); });
+        await authPage.evaluate(() => {
+          const f = document.querySelector('form');
+          if (f) f.submit();
+        });
       }
 
       try {
@@ -168,7 +171,10 @@ setup('authenticate', async ({ page, request }, testInfo) => {
         await pwdFallback.press('Enter').catch(() => null);
       }
       await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => null);
-      await page.evaluate(() => { const f = document.querySelector('form'); if (f) (f as HTMLFormElement).submit(); });
+      await page.evaluate(() => {
+        const f = document.querySelector('form');
+        if (f) f.submit();
+      });
     }
 
     await page.waitForURL('**/panel/**', { timeout: 60000 });
