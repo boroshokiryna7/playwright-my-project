@@ -1,0 +1,49 @@
+name: Playwright Tests in Docker
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  playwright:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      CI: true
+    container:
+      image: mcr.microsoft.com/playwright:v1.39.0-jammy
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify Docker container
+        run: |
+          echo "Tests are running inside Docker container:"
+          cat /etc/os-release
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Create environment file
+        run: |
+          printf '%s\n' \
+            'BASE_URL=https://qauto.forstudy.space' \
+            'HTTP_USERNAME=guest' \
+            'HTTP_PASSWORD=welcome2qauto' > .env
+
+      - name: Run Playwright tests inside Docker
+        run: npx playwright test
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
