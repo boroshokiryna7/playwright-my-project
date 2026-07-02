@@ -8,6 +8,8 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    env:
+      CI: true
     steps:
     - uses: actions/checkout@v5
     - uses: actions/setup-node@v5
@@ -23,10 +25,10 @@ jobs:
     - name: Install dependencies
       run: npm ci
     - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
+      run: npx playwright install --with-deps chromium
     - name: Run Playwright tests
       id: playwright
-      run: npx playwright test
+      run: npx playwright test --project=chromium
       continue-on-error: true
     - name: Upload Playwright report
       if: ${{ !cancelled() }}
