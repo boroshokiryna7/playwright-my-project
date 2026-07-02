@@ -27,7 +27,7 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps chromium
     - name: Run Playwright tests
-      run: npx playwright test --project=chromium
+      run: npx playwright test --config=playwright.config.js --project=chromium
     - name: Upload Playwright report
       if: ${{ always() && !cancelled() }}
       uses: actions/upload-artifact@v4
