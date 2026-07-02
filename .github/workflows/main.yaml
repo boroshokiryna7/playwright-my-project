@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Verify Docker container
         run: |
@@ -28,7 +28,7 @@ jobs:
         run: npm ci
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps
+        run: npx playwright install --with-deps chromium
 
       - name: Create environment file
         run: |
@@ -38,7 +38,9 @@ jobs:
             'HTTP_PASSWORD=welcome2qauto' > .env
 
       - name: Run Playwright tests inside Docker
-        run: npx playwright test
+        id: playwright
+        run: npx playwright test --config=playwright.config.js --project=chromium
+        continue-on-error: true
 
       - name: Upload Playwright report
         uses: actions/upload-artifact@v4
@@ -46,4 +48,9 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report/
+          if-no-files-found: ignore
           retention-days: 30
+
+      - name: Fail if tests failed
+        if: steps.playwright.outcome == 'failure'
+        run: exit 1
